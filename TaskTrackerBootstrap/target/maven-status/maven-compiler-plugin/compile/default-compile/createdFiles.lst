@@ -1,0 +1,8 @@
+com\example\tasktrackerbootstrap\service\UsuarioService.class
+com\example\tasktrackerbootstrap\domain\HabitoHistorico.class
+com\example\tasktrackerbootstrap\TaskTrackerBootstrapApplication.class
+com\example\tasktrackerbootstrap\domain\Usuario.class
+com\example\tasktrackerbootstrap\domain\Habito.class
+com\example\tasktrackerbootstrap\repository\UsuarioRepository.class
+com\example\tasktrackerbootstrap\domain\Tarefa.class
+com\example\tasktrackerbootstrap\controller\UsuarioController.class

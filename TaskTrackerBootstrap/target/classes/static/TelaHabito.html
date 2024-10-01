@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Hábitos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: rgba(202, 201, 201, 0.84);
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 0.3rem;
+        }
+
+        .btn-primary {
+            background-color: rgba(225, 51, 51, 0.81);
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: rgba(195, 48, 48, 0.81);
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Hábitos do Usuário</h1>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Lista de Hábitos</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Descrição</th>
+                    <th>Data de Início</th>
+                    <th>Data de Término</th>
+                    <th>Histórico</th>
+                </tr>
+                </thead>
+                <tbody id="habitosBody">
+                </tbody>
+            </table>
+        </div>
+        <div class="mb-4 text-center">
+            <button class="btn btn-primary mr-2" onclick="irParaCriarHabito()">Adicionar Novo Hábito</button>
+            <button class="btn btn-secondary" onclick="irParaVerTarefas()">Ver Tarefas</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function irParaCriarHabito() {
+        window.location.href = 'http://localhost:63342/TaskTrackerBootstrap/static/NovoHabito.html';
+    }
+
+    function irParaVerTarefas() {
+        window.location.href = 'http://localhost:63342/TaskTrackerBootstrap/static/TelaTarefa.html';
+    }
+
+    function carregarHabitos() {
+        const id = localStorage.getItem('id');
+
+        if (!id) {
+            console.error('ID do usuário não encontrado.');
+            return;
+        }
+
+        fetch(`http://localhost:8080/habitos/usuario/${id}`)
+            .then(response => response.json())
+            .then(habitos => {
+                const tabelaHabitos = document.getElementById('habitosBody');
+                tabelaHabitos.innerHTML = '';
+
+                habitos.forEach(habito => {
+                    const linha = document.createElement('tr');
+
+                    fetch(`http://localhost:8080/habitos/${habito.id}/historico`)
+                        .then(response => response.json())
+                        .then(historico => {
+                            if (historico.length > 0) {
+                                historico.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+                                const dataInicio = new Date(historico[0].data).toLocaleDateString();
+                                const dataTermino = new Date(historico[historico.length - 1].data).toLocaleDateString();
+
+                                const historicoHtml = historico.map(h => `<li>${new Date(h.data).toLocaleDateString()}</li>`).join('');
+
+                                linha.innerHTML = `
+                                    <td>${habito.descricao}</td>
+                                    <td>${dataInicio}</td>
+                                    <td>${dataTermino}</td>
+                                    <td><ul>${historicoHtml}</ul></td>
+                                `;
+                            } else {
+                                linha.innerHTML = `
+                                    <td>${habito.descricao}</td>
+                                    <td>Não disponível</td>
+                                    <td>Não disponível</td>
+                                    <td>Sem histórico</td>
+                                `;
+                            }
+
+                            tabelaHabitos.appendChild(linha);
+                        })
+                        .catch(error => console.error('Erro ao carregar o histórico:', error));
+                });
+            })
+            .catch(error => console.error('Erro ao carregar os hábitos:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', carregarHabitos);
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

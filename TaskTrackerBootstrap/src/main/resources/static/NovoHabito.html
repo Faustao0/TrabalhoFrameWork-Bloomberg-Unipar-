@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Hábitos TaskTracker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: rgba(202, 201, 201, 0.84);
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        .form-control {
+            border-radius: 0.25rem;
+        }
+        .btn-primary {
+            background-color: rgba(225, 51, 51, 0.81);
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: rgba(195, 48, 48, 0.81);
+        }
+        .container {
+            max-width: 600px;
+        }
+        .navbar {
+            margin-bottom: 30px;
+        }
+        .form-header {
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="http://localhost:63342/TaskTrackerBootstrap/static/TelaTarefa.html">Task Tracker</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="http://localhost:63342/TaskTrackerBootstrap/static/TelaTarefa.html">Tarefas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:63342/TaskTrackerBootstrap/static/TelaHabito.html">Hábitos</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="form-header text-center">Cadastrar Novo Hábito</h1>
+            <p class="text-center text-muted mb-4">Preencha os detalhes do novo hábito</p>
+
+            <form id="novoHabitoForm">
+                <div class="form-group">
+                    <label for="descricao">Descrição do Hábito</label>
+                    <input type="text" id="descricao" class="form-control" placeholder="Descrição do Hábito" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dataHabito">Data</label>
+                    <input type="date" id="dataHabito" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Salvar Hábito</button>
+            </form>
+
+            <div id="mensagemSucesso" class="alert alert-success mt-3" style="display: none;">
+                Hábito salvo com sucesso!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('novoHabitoForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const descricao = document.getElementById('descricao').value;
+        const dataHabito = document.getElementById('dataHabito').value;
+        const usuarioId = localStorage.getItem('id');
+
+        const habito = {
+            descricao: descricao,
+            historicos: [{ data: dataHabito }],
+            usuario: { id: usuarioId }
+        };
+
+        fetch(`http://localhost:8080/habitos/salvar/${usuarioId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(habito)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar o hábito: ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log('Sucesso:', data);
+                document.getElementById('mensagemSucesso').style.display = 'block';
+                document.getElementById('mensagemSucesso').innerText = data;
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
