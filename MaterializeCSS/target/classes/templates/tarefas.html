@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #f54296, #478ed1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        .btn-small {
+            margin-right: 5px;
+            background-color: #42a5f5;
+        }
+        .btn-small:hover {
+            background-color: #1e88e5;
+        }
+        .btn-small.red {
+            background-color: #ef5350;
+        }
+        .btn-small.red:hover {
+            background-color: #e53935;
+        }
+        .btn {
+            background-color: #32e633;
+        }
+        .btn:hover {
+            background-color: #0c0e0e;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3 class="center-align">Tarefas de Usuário</h3>
+    <table class="highlight centered">
+        <thead>
+        <tr>
+            <th>Descrição</th>
+            <th>Data de Início</th>
+            <th>Data Limite</th>
+            <th>Concluída</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tarefa : ${tarefas}">
+            <td th:text="${tarefa.descricao}"></td>
+            <td th:text="${#dates.format(tarefa.dataInicio, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#dates.format(tarefa.dataLimite, 'dd/MM/yyyy')}"></td>
+            <td>
+                <p>
+                    <label>
+                        <input type="checkbox" th:checked="${tarefa.concluida}" disabled />
+                        <span></span>
+                    </label>
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="center-align">
+        <a href="/tarefas/cadastrar" class="btn">Adicionar Tarefa</a>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

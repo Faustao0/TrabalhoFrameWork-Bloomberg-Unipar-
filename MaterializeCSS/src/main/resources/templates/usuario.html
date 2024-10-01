@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #f54296, #478ed1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+        h3 {
+            margin-bottom: 30px;
+        }
+        .btn {
+            background-color: #48cf0e;
+        }
+        .btn:hover {
+            background-color: #478ed1;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3 class="center-align">Cadastro de Usuário</h3>
+    <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post">
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="text" id="nome" th:field="*{nome}" required>
+                <label for="nome">Nome</label>
+            </div>
+            <div class="input-field col s12">
+                <input type="email" id="email" th:field="*{email}" required>
+                <label for="email">Email</label>
+            </div>
+            <div class="input-field col s12">
+                <input type="password" id="senha" th:field="*{senha}" required>
+                <label for="senha">Senha</label>
+            </div>
+            <div class="col s12 center-align">
+                <button class="btn waves-effect waves-light" type="submit">Cadastrar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

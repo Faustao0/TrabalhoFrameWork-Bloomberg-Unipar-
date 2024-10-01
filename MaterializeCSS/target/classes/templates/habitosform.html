@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Hábito</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #f54296, #478ed1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        .btn {
+            background-color: #32e633;
+        }
+        .btn:hover {
+            background-color: #1565c0;
+        }
+        label {
+            color: #1e88e5;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3 class="center-align">Cadastro de Hábito</h3>
+    <form th:action="@{/habitos/salvar}" th:object="${habito}" method="post">
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="text" id="descricao" th:field="*{descricao}" required>
+                <label for="descricao">Descrição do Hábito</label>
+            </div>
+            <div class="col s12 center-align">
+                <button class="btn waves-effect waves-light" type="submit">Salvar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
